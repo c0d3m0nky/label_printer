@@ -252,6 +252,7 @@ def main():
 
         sheet.save((_script_root / 'output.pdf').as_posix())
         print("{0:d} label(s) output on {1:d} page(s).".format(sheet.label_count, sheet.page_count))
+        print(f'file://{_script_root.as_posix()}/output.pdf')
     except ValueError as e:
         print('error: %s\n' % e)
         _args.print_help()
