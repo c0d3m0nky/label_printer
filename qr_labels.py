@@ -132,6 +132,7 @@ _label_meta: Dict[str, LabelMeta] = {
 }
 
 _rx_url = re.compile(r'(https?://)?(.+[^/.]+\.[^/.]+)(/?.+)?')
+_line_break_help = _line_break.replace('%', '%%')
 
 
 class Args(Tap):
@@ -144,7 +145,7 @@ class Args(Tap):
         self.add_argument('label_type', type=str, choices=_label_meta.keys(), help='Type of label')
         self.add_argument('skip', type=int, help='Number of label slots to skip')
         self.add_argument('--break-on-any', action='store_true', help='Break line on any char', default=False)
-        self.add_argument('data', type=str, nargs='+', help=f'Tilde delimited data, use {_line_break} for line break')
+        self.add_argument('data', type=str, nargs='+', help=f'Tilde delimited data, use {_line_break_help} for line break')
 
     def process_args(self) -> None:
         # noinspection PyTypeChecker
@@ -253,7 +254,7 @@ def main():
         sheet.save((_script_root / 'output.pdf').as_posix())
         print("{0:d} label(s) output on {1:d} page(s).".format(sheet.label_count, sheet.page_count))
         print(f'file://{_script_root.as_posix()}/output.pdf')
-    except ValueError as e:
+    except Exception as e:
         print('error: %s\n' % e)
         _args.print_help()
         sys.exit(2)
